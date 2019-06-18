@@ -1,0 +1,10 @@
+[Unit]
+Description=Update the system once a day without user prompts
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/auto-update
+Wants=auto-update.timer
+
+[Install]
+WantedBy=multi-user.target

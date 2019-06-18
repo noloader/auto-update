@@ -1,0 +1,10 @@
+[Unit]
+Description=Run auto-update.service once a day
+
+[Timer]
+OnCalendar=*-*-* 04:00:00
+RandomizedDelaySec=600
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+# Update the package lists
+if dnf -y makecache &>/dev/null
+then
+    echo "Updated package list"
+fi
+
+# If no packages are upgradable, then the message is "Last metadata expiration check ...".
+# Otherwise a package name is listed as upgradable.
+COUNT=$(dnf check-update 2>/dev/null | grep -v 'Last metadata' | wc -l)
+
+# Only update and reboot if packages are available
+if [[ "$COUNT" -gt 0 ]]
+then
+    if dnf -y update &>/dev/null
+    then
+        echo "Upgraded system"
+    else
+        echo "Failed to upgrade system"
+        [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+    fi
+
+    echo "Purging old packages"
+    dnf -y autoremove &>/dev/null
+
+    NEEDS_REBOOT=1
+else
+    echo "No system updates"
+fi
+
+# https://serverfault.com/q/122178
+if [[ $(lsof | grep "(path inode=.*)" | wc -l) -gt 0 ]]
+then
+    NEEDS_REBOOT=1
+fi
+
+if [[ "$NEEDS_REBOOT" -eq 1 ]]
+then
+    echo "Scheduling reboot in 10 minutes"
+    # reboot -r +10
+    systemd-run --on-active=10m shutdown -r now
+fi
+
+[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 0 || return 0
