@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DEBIAN_FRONTEND=noninteractive
 
 # Update the package lists
 if apt-get update &>/dev/null
