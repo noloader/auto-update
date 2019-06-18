@@ -1,6 +1,6 @@
 # Auto-Update
 
-Auto-Update is a systemd service, systemd time and shell script to update the system and reboot the machine as required. It is intended to close the gap after "automatically install security updates", where other updates are not applied automatically.
+Auto-Update is a systemd service, systemd timer and shell script to update the system and reboot the machine as necessary. It is intended to close the gap after "automatically install security updates", where other updates are not applied automatically and the user must figure out what to do.
 
 We can partially sidestep users by automatically installing security updates. However, distros still prompt users for non-security updates, and many non-technical users don't know what the prompt is or what they should do. This is a usablity problem that many distros have not addressed.
 
@@ -37,13 +37,14 @@ cp -T auto-update.dnf /usr/sbin/auto-update
 Second, enable the timer:
 
 ```
+systemctl enable auto-update.service
 systemctl enable auto-update.timer
 systemctl start auto-update.timer
 ```
 
 ## Service status
 
-Once the files are copied and the service and timer are enabled, you can check the status with the following commands. The timer should show `enabled`.
+Once the files are copied and the service and timer are enabled, you can check the status with the following commands. The timer should show `enabled`, and `active (waiting)`.
 
 ```
 $ systemctl status auto-update.timer
@@ -61,6 +62,8 @@ $ systemctl status auto-update.service
    Loaded: loaded (/etc/systemd/system/auto-update.service; enabled; vendor pre>
    Active: inactive (dead)
 ```
+
+You can also use `systemctl list-timers` to show the status of all timers on the system.
 
 ## Crontab
 
