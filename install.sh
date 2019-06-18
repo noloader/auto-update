@@ -54,5 +54,9 @@ if ! systemctl start auto-update.timer; then
     [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
+if ! systemctl daemon-reload 2>/dev/null; then
+    echo "Failed to daemon-reload"
+fi
+
 echo "Installed services"
 [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 0 || return 0
