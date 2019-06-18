@@ -17,19 +17,19 @@ case "$os_name" in
         cp -T auto-update.dnf /usr/sbin/auto-update
         ;;
     "red hat")
-        echo "Installing on Fedora"
+        echo "Installing on Red Hat"
         cp auto-update.service /etc/systemd/system
         cp auto-update.timer /etc/systemd/system
         cp -T auto-update.dnf /usr/sbin/auto-update
         ;;
     "debian")
-        echo "Installing on Fedora"
+        echo "Installing on Debian"
         cp auto-update.service /etc/systemd/system
         cp auto-update.timer /etc/systemd/system
         cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "ubuntu")
-        echo "Installing on Fedora"
+        echo "Installing on Ubuntu"
         cp auto-update.service /etc/systemd/system
         cp auto-update.timer /etc/systemd/system
         cp -T auto-update.apt /usr/sbin/auto-update
