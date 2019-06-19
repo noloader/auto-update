@@ -1,25 +1,24 @@
 #!/usr/bin/env bash
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DEBIAN_FRONTEND=noninteractive
 
 # Update the package lists
-if apt-get update &>/dev/null
+if yum -y makecache &>/dev/null
 then
     echo "Updated package list"
-else
-    echo "Failed to update package list"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
-# If no packages are upgradable, then the message is "Listing... Done".
+# If no packages are upgradable, then the message is "Last metadata expiration check ...".
 # Otherwise a package name is listed as upgradable.
-COUNT=$(apt list --upgradable 2>/dev/null | grep -v 'Listing' | wc -l)
+COUNT=$(yum check-update 2>/dev/null | grep -v 'Last metadata' | wc -l)
 
 # Only update and reboot if packages are available
 if [[ "$COUNT" -gt 0 ]]
 then
-    if apt-get dist-upgrade -y &>/dev/null
+    yum -y update &>/dev/null
+    RETVAL=$?
+
+    if [[ ("$RETVAL" -eq 0) || ("$RETVAL" -eq 100) ]]
     then
         echo "Upgraded system"
     else
@@ -28,14 +27,15 @@ then
     fi
 
     echo "Purging old packages"
-    apt autoremove --purge &>/dev/null
+    yum -y autoremove &>/dev/null
 
     NEEDS_REBOOT=1
 else
     echo "No system updates"
 fi
 
-if [[ -f /var/run/reboot-required ]]
+# https://serverfault.com/q/122178
+if [[ $(lsof | grep "(path inode=.*)" | wc -l) -gt 0 ]]
 then
     NEEDS_REBOOT=1
 fi
