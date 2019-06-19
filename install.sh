@@ -5,11 +5,27 @@ if [[ "$EUID" -ne 0 ]]; then
     [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
+if [[ -z $(command -v systemctl) ]]; then
+    echo "Systemd not found"
+    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
+
+if [[ ! -d /etc/systemd/system ]]; then
+    echo "Systemd not found"
+    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
+
 lsb_name=$(lsb_release -a | awk -F ':' '$1 == "Distributor ID" {print $2}')
 os_name=$(echo $lsb_name | tr '[:upper:]' '[:lower:]')
 echo "Operating system: $os_name"
 
 case "$os_name" in
+    "centos")
+        echo "Installing on CentOS"
+        cp auto-update.service /etc/systemd/system
+        cp auto-update.timer /etc/systemd/system
+        cp -T auto-update.dnf /usr/sbin/auto-update
+        ;;
     "fedora")
         echo "Installing on Fedora"
         cp auto-update.service /etc/systemd/system
@@ -22,6 +38,13 @@ case "$os_name" in
         cp auto-update.timer /etc/systemd/system
         cp -T auto-update.dnf /usr/sbin/auto-update
         ;;
+
+    "armbian")
+        echo "Installing on Armbian"
+        cp auto-update.service /etc/systemd/system
+        cp auto-update.timer /etc/systemd/system
+        cp -T auto-update.apt /usr/sbin/auto-update
+        ;;
     "debian")
         echo "Installing on Debian"
         cp auto-update.service /etc/systemd/system
@@ -30,6 +53,12 @@ case "$os_name" in
         ;;
     "ubuntu")
         echo "Installing on Ubuntu"
+        cp auto-update.service /etc/systemd/system
+        cp auto-update.timer /etc/systemd/system
+        cp -T auto-update.apt /usr/sbin/auto-update
+        ;;
+    "zorin")
+        echo "Installing on Zorin"
         cp auto-update.service /etc/systemd/system
         cp auto-update.timer /etc/systemd/system
         cp -T auto-update.apt /usr/sbin/auto-update
