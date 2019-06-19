@@ -10,15 +10,15 @@ fi
 
 # If no packages are upgradable, then the message is "Last metadata expiration check ...".
 # Otherwise a package name is listed as upgradable.
-COUNT=$(yum check-update 2>/dev/null | grep -v 'Last metadata' | wc -l)
+count=$(yum check-update 2>/dev/null | grep -v 'Last metadata' | wc -l)
 
 # Only update and reboot if packages are available
-if [[ "$COUNT" -gt 0 ]]
+if [[ "$count" -gt 0 ]]
 then
     yum -y update &>/dev/null
-    RETVAL=$?
+    ret_val=$?
 
-    if [[ ("$RETVAL" -eq 0) || ("$RETVAL" -eq 100) ]]
+    if [[ ("$ret_val" -eq 0) || ("$ret_val" -eq 100) ]]
     then
         echo "Upgraded system"
     else
@@ -29,7 +29,7 @@ then
     echo "Purging old packages"
     yum -y autoremove &>/dev/null
 
-    NEEDS_REBOOT=1
+    needs_reboot=1
 else
     echo "No system updates"
 fi
@@ -37,10 +37,10 @@ fi
 # https://serverfault.com/q/122178
 if [[ $(lsof | grep "(path inode=.*)" | wc -l) -gt 0 ]]
 then
-    NEEDS_REBOOT=1
+    needs_reboot=1
 fi
 
-if [[ "$NEEDS_REBOOT" -eq 1 ]]
+if [[ "$needs_reboot" -eq 1 ]]
 then
     echo "Scheduling reboot in 10 minutes"
     # reboot -r +10

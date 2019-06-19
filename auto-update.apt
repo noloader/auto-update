@@ -14,10 +14,10 @@ fi
 
 # If no packages are upgradable, then the message is "Listing... Done".
 # Otherwise a package name is listed as upgradable.
-COUNT=$(apt list --upgradable 2>/dev/null | grep -v 'Listing' | wc -l)
+count=$(apt list --upgradable 2>/dev/null | grep -v 'Listing' | wc -l)
 
 # Only update and reboot if packages are available
-if [[ "$COUNT" -gt 0 ]]
+if [[ "$count" -gt 0 ]]
 then
     if apt-get dist-upgrade -y &>/dev/null
     then
@@ -30,17 +30,17 @@ then
     echo "Purging old packages"
     apt autoremove --purge &>/dev/null
 
-    NEEDS_REBOOT=1
+    needs_reboot=1
 else
     echo "No system updates"
 fi
 
 if [[ -f /var/run/reboot-required ]]
 then
-    NEEDS_REBOOT=1
+    needs_reboot=1
 fi
 
-if [[ "$NEEDS_REBOOT" -eq 1 ]]
+if [[ "$needs_reboot" -eq 1 ]]
 then
     echo "Scheduling reboot in 10 minutes"
     # reboot -r +10
