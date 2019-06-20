@@ -7,9 +7,6 @@ DEBIAN_FRONTEND=noninteractive
 if apt-get update &>/dev/null
 then
     echo "Updated package list"
-else
-    echo "Failed to update package list"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
 # If no packages are upgradable, then the message is "Listing... Done".
@@ -19,12 +16,16 @@ count=$(apt list --upgradable 2>/dev/null | grep -v 'Listing' | wc -l)
 # Only update and reboot if packages are available
 if [[ "$count" -gt 0 ]]
 then
-    if apt-get dist-upgrade -y &>/dev/null
+
+    apt-get dist-upgrade -y &>/dev/null
+    ret_val=$?
+
+    if [[ "$ret_val" -eq 0 ]]
     then
         echo "Upgraded system"
     else
-        echo "Failed to upgrade system"
-        [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+        echo "Failed to upgrade system, error $ret_val"
+        exit "$ret_val"
     fi
 
     echo "Purging old packages"
@@ -47,4 +48,4 @@ then
     systemd-run --on-active=10m shutdown -r now
 fi
 
-[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 0 || return 0
+exit 0
