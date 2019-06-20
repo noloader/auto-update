@@ -10,7 +10,7 @@ fi
 
 # If no packages are upgradable, then the message is "Last metadata expiration check ...".
 # Otherwise a package name is listed as upgradable.
-count=$(yum check-update 2>/dev/null | grep -v 'Last metadata' | wc -l)
+count=$(yum check-update 2>/dev/null | grep -v -E 'Last metadata|^Fedora' | wc -l)
 
 # Only update and reboot if packages are available
 if [[ "$count" -gt 0 ]]
@@ -22,7 +22,7 @@ then
     then
         echo "Upgraded system"
     else
-        echo "Failed to upgrade system"
+        echo "Failed to upgrade system, error $ret_val"
         [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
     fi
 
