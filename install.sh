@@ -17,10 +17,10 @@ fi
 
 if [[ -n $(command -v lsb_release) ]]; then
     lsb_name=$(lsb_release -a | awk -F ':' '$1 == "Distributor ID" {print $2}')
-    os_name=$(echo $lsb_name | tr '[:upper:]' '[:lower:]')
+    os_name=$(echo "$lsb_name" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')
 elif [[ -e /etc/os-release ]]; then
-    lsb_name=$(cat /etc/os-release | awk -F '=' '$1 == "ID" {print $2}')
-    os_name=$(echo $lsb_name | tr '[:upper:]' '[:lower:]')
+    lsb_name=$(awk -F '=' '$1 == "ID" {print $2}' < /etc/os-release 2>/dev/null)
+    os_name=$(echo "$lsb_name" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')
 elif [[ -e /etc/fedora-release ]]; then
     os_name="fedora"
 else
