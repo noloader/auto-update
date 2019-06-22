@@ -45,6 +45,8 @@ then
     echo "Scheduling reboot in 10 minutes"
     # reboot -r +10
     systemd-run --on-active=10m shutdown -r now
+else
+    echo "No reboot required"
 fi
 
 exit 0
