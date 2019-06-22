@@ -15,8 +15,18 @@ if [[ ! -d /etc/systemd/system ]]; then
     [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
-lsb_name=$(lsb_release -a | awk -F ':' '$1 == "Distributor ID" {print $2}')
-os_name=$(echo $lsb_name | tr '[:upper:]' '[:lower:]')
+if [[ -n $(command -v lsb_release) ]]; then
+    lsb_name=$(lsb_release -a | awk -F ':' '$1 == "Distributor ID" {print $2}')
+    os_name=$(echo $lsb_name | tr '[:upper:]' '[:lower:]')
+elif [[ -e /etc/os-release ]]; then
+    lsb_name=$(cat /etc/os-release | awk -F '=' '$1 == "ID" {print $2}')
+    os_name=$(echo $lsb_name | tr '[:upper:]' '[:lower:]')
+elif [[ -e /etc/fedora-release ]]; then
+    os_name="fedora"
+else
+    os_name="Unknown"
+fi
+
 echo "Operating system: $os_name"
 
 case "$os_name" in
