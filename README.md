@@ -65,6 +65,6 @@ $ systemctl status auto-update.service
 
 You can also use `systemctl list-timers` to show the status of all timers on the system.
 
-## Crontab
+## Cron jobs
 
-You should be able to schedule `/usr/sbin/auto-update` as a cron job under the system account.
+You should be able to schedule `/usr/sbin/auto-update` as a cron job under the system account. The script `install-cron.sh` will install `auto-update.dnf` or `auto-update.apt` as `/usr/sbin/auto-update` in `/etc/cron.daily`.
