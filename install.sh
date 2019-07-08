@@ -21,8 +21,12 @@ if [[ -n $(command -v lsb_release) ]]; then
 elif [[ -e /etc/os-release ]]; then
     lsb_name=$(awk -F '=' '$1 == "ID" {print $2}' < /etc/os-release 2>/dev/null)
     os_name=$(echo "$lsb_name" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')
+elif [[ -e /etc/redhat-release ]]; then
+    os_name="redhat"
 elif [[ -e /etc/fedora-release ]]; then
     os_name="fedora"
+elif [[ -e /etc/centos-release ]]; then
+    os_name="centos"
 else
     os_name="Unknown"
 fi
@@ -42,7 +46,7 @@ case "$os_name" in
         cp auto-update.timer /etc/systemd/system
         cp -T auto-update.dnf /usr/sbin/auto-update
         ;;
-    "red hat")
+    "red*hat")
         echo "Installing on Red Hat"
         cp auto-update.service /etc/systemd/system
         cp auto-update.timer /etc/systemd/system
