@@ -6,7 +6,7 @@ if [[ "$EUID" -ne 0 ]]; then
 fi
 
 if [[ ! -d "/etc/cron.daily" ]]; then
-    echo "Cron daily"
+    echo "Failed to find cron.daily"
     [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
