@@ -1,45 +1,17 @@
 # Auto-Update
 
-Auto-Update is a systemd service, systemd timer and shell script to update the system and reboot the machine as necessary. It is intended to close the gap after "automatically install security updates", where other updates are not applied automatically and the user must figure out what to do.
+Auto-Update is a systemd service, systemd timer and shell script to *fully* update the system and reboot the machine as necessary. It is intended to close the gap after "automatically install security updates", where other updates are not applied automatically and the user must figure out what to do.
 
 We can partially sidestep users by automatically installing security updates. However, distros still prompt users for non-security updates, and many non-technical users don't know what the prompt is or what they should do. This is a usablity problem that many distros have not addressed.
 
 In addition, some security updates are misclassified and not installed automatically. Misclassifying an update happens more often than you expect. Updates are labeled security if the vulnerability was obvious or someone provided a working exploit. Many design problems and memory errors are not investigated and lack an exploit, so they just get fixed and labeled as non-security. Those that are fixed without investigation must be installed manually by the user.
 
-## Debian Setup
+## Setup
 
-First, copy the files of interest to the specified location. Note that `auto-update.apt` is used for Debian-based systems.
-
-```
-cp auto-update.service /etc/systemd/system
-cp auto-update.timer /etc/systemd/system
-cp -T auto-update.apt /usr/sbin/auto-update
-```
-
-Second, enable the service and timer:
+You should run `install.sh` to install the service. The service runs on Armbian, CentOS, Debian, Fedora, Red Hat, Ubuntu and Zorin.
 
 ```
-systemctl enable auto-update.service
-systemctl enable auto-update.timer
-systemctl start auto-update.timer
-```
-
-## Red Hat Setup
-
-First, copy the files of interest to the specified location. Note that `auto-update.dnf` is used for Red Hat-based systems.
-
-```
-cp auto-update.service /etc/systemd/system
-cp auto-update.timer /etc/systemd/system
-cp -T auto-update.dnf /usr/sbin/auto-update
-```
-
-Second, enable the timer:
-
-```
-systemctl enable auto-update.service
-systemctl enable auto-update.timer
-systemctl start auto-update.timer
+sudo ./install.sh
 ```
 
 ## Service status

@@ -2,12 +2,12 @@
 
 if [[ "$EUID" -ne 0 ]]; then
     echo "This script must be run as root"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+    exit 1
 fi
 
 if [[ ! -d "/etc/cron.daily" ]]; then
     echo "Failed to find cron.daily"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+    exit 1
 fi
 
 if [[ -n $(command -v lsb_release) ]]; then
@@ -60,7 +60,7 @@ case "$os_name" in
         ;;
     *)
         echo "Unkown operating system"
-        [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+        exit 1
 esac
 
 chmod u+rwx /etc/cron.daily/auto-update
@@ -73,4 +73,4 @@ sed -i '/systemd-run/d' /etc/cron.daily/auto-update
 sed -i 's/# shutdown/shutdown/g' /etc/cron.daily/auto-update
 
 echo "Installed service"
-[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 0 || return 0
+exit 0

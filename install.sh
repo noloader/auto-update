@@ -2,17 +2,17 @@
 
 if [[ "$EUID" -ne 0 ]]; then
     echo "This script must be run as root"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+    exit 1
 fi
 
 if [[ -z $(command -v systemctl) ]]; then
     echo "Systemd not found"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+    exit 1
 fi
 
 if [[ ! -d /etc/systemd/system ]]; then
     echo "Systemd not found"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+    exit 1
 fi
 
 if [[ -n $(command -v lsb_release) ]]; then
@@ -79,22 +79,22 @@ case "$os_name" in
         ;;
     *)
         echo "Unkown operating system"
-        [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+        exit 1
 esac
 
 if ! systemctl enable auto-update.service; then
     echo "Failed to enable auto-update.service"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+    exit 1
 fi
 
 if ! systemctl enable auto-update.timer; then
     echo "Failed to enable auto-update.timer"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+    exit 1
 fi
 
 if ! systemctl start auto-update.timer; then
     echo "Failed to start auto-update.timer"
-    [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+    exit 1
 fi
 
 if ! systemctl daemon-reload 2>/dev/null; then
@@ -106,4 +106,4 @@ if ! systemctl reset-failed; then
 fi
 
 echo "Installed services"
-[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 0 || return 0
+exit 0
