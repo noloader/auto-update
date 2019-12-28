@@ -65,6 +65,12 @@ case "$os_name" in
         cp auto-update.timer /etc/systemd/system
         cp -T auto-update.apt /usr/sbin/auto-update
         ;;
+    "raspbian")
+        echo "Installing on Raspbian"
+        cp auto-update.service /etc/systemd/system
+        cp auto-update.timer /etc/systemd/system
+        cp -T auto-update.apt /usr/sbin/auto-update
+        ;;
     "ubuntu")
         echo "Installing on Ubuntu"
         cp auto-update.service /etc/systemd/system
