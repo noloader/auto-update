@@ -88,10 +88,13 @@ case "$os_name" in
         exit 1
 esac
 
-if ! systemctl enable auto-update.service; then
-    echo "Failed to enable auto-update.service"
-    exit 1
-fi
+systemctl disable auto-update.service &>/dev/null
+systemctl disable auto-update.timer &>/dev/null
+
+#if ! systemctl enable auto-update.service; then
+#    echo "Failed to enable auto-update.service"
+#    exit 1
+#fi
 
 if ! systemctl enable auto-update.timer; then
     echo "Failed to enable auto-update.timer"
