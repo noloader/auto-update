@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PATH=/sbin:/usr/sbin:/bin:/usr/bin
+export PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 # Update the package lists
 if dnf -y makecache &>/dev/null
@@ -10,10 +10,10 @@ fi
 
 # If no packages are upgradable, then the message is "Last metadata expiration check ...".
 # Otherwise a package name is listed as upgradable.
-count=$(dnf check-update 2>/dev/null | grep -v -E 'Last metadata|^Fedora' | wc -l)
+needs_update=$(dnf check-update 2>/dev/null | grep -c -v -E 'Last metadata|^Fedora')
 
 # Only update and reboot if packages are available
-if [[ "$count" -gt 0 ]]
+if [[ "$needs_update" -gt 0 ]]
 then
     dnf -y update &>/dev/null
     ret_val=$?
@@ -35,12 +35,8 @@ else
 fi
 
 # https://serverfault.com/q/122178
-if [[ $(lsof | grep "(path inode=.*)" | wc -l) -gt 0 ]]
-then
-    needs_reboot=1
-fi
-
-if [[ "$needs_reboot" -eq 1 ]]
+needs_reboot=$(lsof | grep -c "(path inode=.*)")
+if [[ "$needs_reboot" -gt 0 ]]
 then
     echo "Scheduling reboot in 10 minutes"
     # shutdown -r +10

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DEBIAN_FRONTEND=noninteractive
+export PATH=/sbin:/usr/sbin:/bin:/usr/bin
+export DEBIAN_FRONTEND=noninteractive
 
 # Update the package lists
 if apt-get update &>/dev/null
@@ -11,10 +11,10 @@ fi
 
 # If no packages are upgradable, then the message is "Listing... Done".
 # Otherwise a package name is listed as upgradable.
-count=$(apt list --upgradable 2>/dev/null | grep -v 'Listing' | wc -l)
+needs_update=$(apt list --upgradable 2>/dev/null | grep -i -c -v 'Listing')
 
 # Only update and reboot if packages are available
-if [[ "$count" -gt 0 ]]
+if [[ "$needs_update" -gt 0 ]]
 then
 
     apt-get dist-upgrade -y &>/dev/null

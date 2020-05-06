@@ -4,7 +4,5 @@ Documentation=https://github.com/noloader/auto-update
 
 [Service]
 Type=oneshot
+User=root
 ExecStart=/usr/sbin/auto-update
-
-[Install]
-WantedBy=multi-user.target

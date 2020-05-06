@@ -3,7 +3,7 @@ Description=Run auto-update.service once a day
 Documentation=https://github.com/noloader/auto-update
 
 [Timer]
-OnCalendar=*-*-* 04:00:00
+OnCalendar=*-*-* 04:10:00
 RandomizedDelaySec=600
 Persistent=true
 
