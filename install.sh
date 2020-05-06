@@ -36,57 +36,37 @@ echo "Operating system: $os_name"
 case "$os_name" in
     "centos")
         echo "Installing on CentOS"
-        cp auto-update.service /etc/systemd/system
-        cp auto-update.timer /etc/systemd/system
-        cp -T auto-update.dnf /usr/sbin/auto-update
         ;;
     "fedora")
         echo "Installing on Fedora"
-        cp auto-update.service /etc/systemd/system
-        cp auto-update.timer /etc/systemd/system
-        cp -T auto-update.dnf /usr/sbin/auto-update
         ;;
     "red*hat")
         echo "Installing on Red Hat"
-        cp auto-update.service /etc/systemd/system
-        cp auto-update.timer /etc/systemd/system
-        cp -T auto-update.dnf /usr/sbin/auto-update
         ;;
 
     "armbian")
         echo "Installing on Armbian"
-        cp auto-update.service /etc/systemd/system
-        cp auto-update.timer /etc/systemd/system
-        cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "debian")
         echo "Installing on Debian"
-        cp auto-update.service /etc/systemd/system
-        cp auto-update.timer /etc/systemd/system
-        cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "raspbian")
         echo "Installing on Raspbian"
-        cp auto-update.service /etc/systemd/system
-        cp auto-update.timer /etc/systemd/system
-        cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "ubuntu")
         echo "Installing on Ubuntu"
-        cp auto-update.service /etc/systemd/system
-        cp auto-update.timer /etc/systemd/system
-        cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "zorin")
         echo "Installing on Zorin"
-        cp auto-update.service /etc/systemd/system
-        cp auto-update.timer /etc/systemd/system
-        cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     *)
         echo "Unkown operating system"
         exit 1
 esac
+
+cp auto-update.service /etc/systemd/system
+cp auto-update.timer /etc/systemd/system
+cp -T auto-update.apt /usr/sbin/auto-update
 
 systemctl disable auto-update.service &>/dev/null
 systemctl disable auto-update.timer &>/dev/null
