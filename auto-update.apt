@@ -11,7 +11,7 @@ fi
 
 # If no packages are upgradable, then the message is "Listing... Done".
 # Otherwise a package name is listed as upgradable.
-needs_update=$(apt list --upgradable 2>/dev/null | grep -i -c -v 'Listing')
+needs_update=$(apt list --upgradable 2>/dev/null | grep -i -v 'Listing' | wc -l)
 
 # Only update and reboot if packages are available
 if [[ "$needs_update" -gt 0 ]]

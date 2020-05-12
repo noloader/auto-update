@@ -10,7 +10,7 @@ fi
 
 # If no packages are upgradable, then the message is "Last metadata expiration check ...".
 # Otherwise a package name is listed as upgradable.
-needs_update=$(yum check-update 2>/dev/null | grep -c -v -E '^Last metadata|^Fedora')
+needs_update=$(yum check-update 2>/dev/null | grep -v -E '^Last metadata|^Fedora' | wc -l)
 
 # Only update and reboot if packages are available
 if [[ "$needs_update" -gt 0 ]]
