@@ -60,6 +60,10 @@ case "$os_name" in
         echo "Installing on Zorin"
         cp -T auto-update.apt /etc/cron.daily/auto-update
         ;;
+    "linaro")
+        echo "Installing on Linaro"
+        cp -T auto-update.apt /etc/cron.daily/auto-update
+        ;;
     *)
         echo "Unkown operating system"
         exit 1
