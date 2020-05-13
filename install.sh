@@ -86,6 +86,9 @@ if ! systemctl start auto-update.timer; then
     exit 1
 fi
 
+# Is this needed?
+systemctl enable auto-update.service &>/dev/null
+
 if ! systemctl daemon-reload 2>/dev/null; then
     echo "Failed to daemon-reload"
 fi
