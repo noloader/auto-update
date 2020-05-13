@@ -71,6 +71,7 @@ cp -T auto-update.apt /usr/sbin/auto-update
 systemctl disable auto-update.service &>/dev/null
 systemctl disable auto-update.timer &>/dev/null
 
+# Not needed. The timer calls it.
 #if ! systemctl enable auto-update.service; then
 #    echo "Failed to enable auto-update.service"
 #    exit 1
@@ -85,9 +86,6 @@ if ! systemctl start auto-update.timer; then
     echo "Failed to start auto-update.timer"
     exit 1
 fi
-
-# Is this needed?
-systemctl enable auto-update.service &>/dev/null
 
 if ! systemctl daemon-reload 2>/dev/null; then
     echo "Failed to daemon-reload"
