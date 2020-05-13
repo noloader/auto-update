@@ -73,7 +73,7 @@ cp auto-update.service /etc/systemd/system
 cp auto-update.timer /etc/systemd/system
 cp -T auto-update.apt /usr/sbin/auto-update
 
-# Not needed. The timer calls it.
+# Not needed. The timer activates the service.
 #if ! systemctl enable auto-update.service; then
 #    echo "Failed to enable auto-update.service"
 #    exit 1
