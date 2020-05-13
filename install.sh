@@ -6,12 +6,12 @@ if [[ "$EUID" -ne 0 ]]; then
 fi
 
 if [[ -z $(command -v systemctl) ]]; then
-    echo "Systemd not found"
+    echo "systemctl not found"
     exit 1
 fi
 
 if [[ ! -d /etc/systemd/system ]]; then
-    echo "Systemd not found"
+    echo "Systemd directory not found"
     exit 1
 fi
 
