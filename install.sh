@@ -64,12 +64,14 @@ case "$os_name" in
         exit 1
 esac
 
+systemctl disable auto-update.service &>/dev/null
+systemctl disable auto-update.timer &>/dev/null
+
+find /etc/systemd -name 'auto-update.*' -exec rm -f {} \;
+
 cp auto-update.service /etc/systemd/system
 cp auto-update.timer /etc/systemd/system
 cp -T auto-update.apt /usr/sbin/auto-update
-
-systemctl disable auto-update.service &>/dev/null
-systemctl disable auto-update.timer &>/dev/null
 
 # Not needed. The timer calls it.
 #if ! systemctl enable auto-update.service; then
