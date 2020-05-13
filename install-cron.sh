@@ -13,11 +13,9 @@ if [[ ! -d "/etc/cron.daily" ]]; then
 fi
 
 if [[ -n $(command -v lsb_release) ]]; then
-    lsb_name=$(lsb_release -a | awk -F ':' '$1 == "Distributor ID" {print $2}')
-    os_name=$(echo "$lsb_name" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')
+    os_name=$(lsb_release -a | awk -F ':' '$1 == "Distributor ID" {print $2}')
 elif [[ -e /etc/os-release ]]; then
-    lsb_name=$(awk -F '=' '$1 == "ID" {print $2}' < /etc/os-release 2>/dev/null)
-    os_name=$(echo "$lsb_name" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')
+    os_name=$(awk -F '=' '$1 == "ID" {print $2}' < /etc/os-release 2>/dev/null)
 elif [[ -e /etc/redhat-release ]]; then
     os_name="redhat"
 elif [[ -e /etc/fedora-release ]]; then
@@ -28,6 +26,7 @@ else
     os_name="Unknown"
 fi
 
+os_name=$(echo "$os_name" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')
 echo "Operating system: $os_name"
 
 case "$os_name" in
