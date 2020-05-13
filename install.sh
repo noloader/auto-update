@@ -59,6 +59,9 @@ case "$os_name" in
     "zorin")
         echo "Installing on Zorin"
         ;;
+    "linaro")
+        echo "Installing on Linaro"
+        ;;
     *)
         echo "Unkown operating system"
         exit 1
