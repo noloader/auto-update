@@ -9,6 +9,12 @@ then
     echo "Updated package list"
 fi
 
+if true
+then
+    echo "Purging old packages"
+    apt autoremove --purge &>/dev/null
+fi
+
 # If no packages are upgradable, then the message is "Listing... Done".
 # Otherwise a package name is listed as upgradable.
 needs_update=$(apt list --upgradable 2>/dev/null | grep -i -v 'Listing' | wc -l)
@@ -27,9 +33,6 @@ then
         echo "Failed to upgrade system, error $ret_val"
         exit "$ret_val"
     fi
-
-    echo "Purging old packages"
-    apt autoremove --purge &>/dev/null
 
     needs_reboot=1
 else

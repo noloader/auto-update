@@ -8,7 +8,7 @@ In addition, some security updates are misclassified and not installed automatic
 
 ## Setup
 
-You should run `install.sh` to install the service. The service runs on Armbian, CentOS, Debian, Fedora, Red Hat, Ubuntu and Zorin.
+You should run `install.sh` to install the service. The service runs on Armbian, CentOS, Debian, Fedora, Linaro, Red Hat, Ubuntu and Zorin.
 
 ```
 sudo ./install.sh
@@ -24,15 +24,6 @@ $ systemctl status auto-update.timer
    Loaded: loaded (/etc/systemd/system/auto-update.timer; enabled; vendor prese>
    Active: active (waiting) since Tue 2019-06-18 10:41:42 EDT; 6min ago
    Trigger: Wed 2019-06-19 05:02:25 EDT; 18h left
-```
-
-And `auto-update.service`. The service should show `enabled`.
-
-```
-$ systemctl status auto-update.service
-● auto-update.service - Update the system once a day without user prompts
-   Loaded: loaded (/etc/systemd/system/auto-update.service; enabled; vendor pre>
-   Active: inactive (dead)
 ```
 
 You can also use `systemctl list-timers` to show the status of all timers on the system.

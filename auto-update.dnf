@@ -8,6 +8,12 @@ then
     echo "Updated package list"
 fi
 
+if true
+then
+    echo "Purging old packages"
+    dnf -y autoremove &>/dev/null
+fi
+
 # If no packages are upgradable, then the message is "Last metadata expiration check ...".
 # Otherwise a package name is listed as upgradable.
 needs_update=$(dnf check-update 2>/dev/null | grep -v -E 'Last metadata|^Fedora' | wc -l)
@@ -25,9 +31,6 @@ then
         echo "Failed to upgrade system, error $ret_val"
         exit "$ret_val"
     fi
-
-    echo "Purging old packages"
-    dnf -y autoremove &>/dev/null
 
     needs_reboot=1
 else
