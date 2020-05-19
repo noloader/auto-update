@@ -9,6 +9,14 @@ then
     echo "Updated package list"
 fi
 
+# Ubuntu makes it a pain in the ass to remove old kernels
+# https://help.ubuntu.com/community/RemoveOldKernels
+if true
+then
+    apt-mark auto '^linux-.*-4.*(-generic)?$' &>/dev/null
+    apt-mark auto '^linux-.*-5.*(-generic)?$' &>/dev/null
+fi
+
 if true
 then
     echo "Purging old packages"
