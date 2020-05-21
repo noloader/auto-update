@@ -3,10 +3,7 @@
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 # Update the package lists
-if dnf -y makecache &>/dev/null
-then
-    echo "Updated package list"
-fi
+dnf clean all &>/dev/null
 
 if true
 then
