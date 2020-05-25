@@ -35,7 +35,7 @@ else
 fi
 
 # https://serverfault.com/q/122178
-needs_reboot=$(lsof | grep -c "(path inode=.*)")
+needs_reboot=$(lsof 2>&1 | grep -c "(path inode=.*)")
 if [[ "$needs_reboot" -gt 0 ]]
 then
     echo "Scheduling reboot in 10 minutes"
