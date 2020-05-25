@@ -15,6 +15,11 @@ if [[ ! -d /etc/systemd/system ]]; then
     exit 1
 fi
 
+systemctl disable auto-update.service &>/dev/null
+systemctl disable auto-update.timer &>/dev/null
+
+find /etc/systemd -name 'auto-update.*' -exec rm -f {} \;
+
 if [[ -n $(command -v lsb_release) ]]; then
     os_name=$(lsb_release -a | awk -F ':' '$1 == "Distributor ID" {print $2}')
 elif [[ -e /etc/os-release ]]; then
@@ -35,45 +40,62 @@ echo "Operating system: $os_name"
 case "$os_name" in
     "centos")
         echo "Installing on CentOS"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.yum /usr/sbin/auto-update
         ;;
     "fedora")
         echo "Installing on Fedora"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.dnf /usr/sbin/auto-update
         ;;
     "red*hat")
         echo "Installing on Red Hat"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.yum /usr/sbin/auto-update
         ;;
-
     "armbian")
         echo "Installing on Armbian"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "debian")
         echo "Installing on Debian"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "raspbian")
         echo "Installing on Raspbian"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "ubuntu")
         echo "Installing on Ubuntu"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "zorin")
         echo "Installing on Zorin"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "linaro")
         echo "Installing on Linaro"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     *)
         echo "Unkown operating system"
         exit 1
 esac
-
-systemctl disable auto-update.service &>/dev/null
-systemctl disable auto-update.timer &>/dev/null
-
-find /etc/systemd -name 'auto-update.*' -exec rm -f {} \;
-
-cp auto-update.service /etc/systemd/system
-cp auto-update.timer /etc/systemd/system
-cp -T auto-update.apt /usr/sbin/auto-update
 
 # Not needed. The timer activates the service.
 #if ! systemctl enable auto-update.service; then
