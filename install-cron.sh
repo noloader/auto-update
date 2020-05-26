@@ -89,7 +89,7 @@ sed '/systemd-run/d' "$cron_dir/auto-update" > "$cron_dir/auto-update.new"
 mv "$cron_dir/auto-update.new" "$cron_dir/auto-update"
 
 # Uncomment shutdown command
-sed -i 's/# shutdown/shutdown/g' "$cron_dir/auto-update" > "$cron_dir/auto-update.new"
+sed 's/# shutdown/shutdown/g' "$cron_dir/auto-update" > "$cron_dir/auto-update.new"
 mv "$cron_dir/auto-update.new" "$cron_dir/auto-update"
 
 echo "Installed service"
