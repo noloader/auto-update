@@ -74,7 +74,7 @@ case "$os_name" in
         ;;
     "solaris")
         echo "Installing on Solaris"
-        cp -T auto-update.solaris "$cron_dir/auto-update"
+        cp auto-update.solaris "$cron_dir/auto-update"
         ;;
     *)
         echo "Unkown operating system"
