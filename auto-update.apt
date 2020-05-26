@@ -3,9 +3,9 @@
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin
 export DEBIAN_FRONTEND=noninteractive
 
-# Update the package lists
+echo "Updating package list"
 apt-get -y autoclean &>/dev/null
-apt-get update
+apt-get update &>/dev/null
 
 # Ubuntu makes it a pain in the ass to remove old kernels
 # https://help.ubuntu.com/community/RemoveOldKernels

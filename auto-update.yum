@@ -2,7 +2,7 @@
 
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
-# Remove old package list, then update the package lists
+echo "Updating package list"
 yum clean all &>/dev/null
 yum check-update &>/dev/null
 

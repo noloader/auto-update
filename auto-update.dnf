@@ -2,7 +2,7 @@
 
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
-# Remove old package list, then update the package lists
+echo "Updating package list"
 dnf clean all &>/dev/null
 dnf check-update &>/dev/null
 
