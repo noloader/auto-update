@@ -7,7 +7,14 @@ if [[ "$EUID" -ne 0 ]]; then
     exit 1
 fi
 
-if [[ ! -d "/etc/cron.daily" ]]; then
+cron_dir=
+if [[ -d "/etc/cron.daily" ]]; then
+    cron_dir="$cron_dir"
+elif [[ -d "/var/spool/cron/crontabs" ]]; then
+    cron_dir="/var/spool/cron/crontabs"
+fi
+
+if [[ -z "$cron_dir" ]]; then
     echo "Failed to find cron.daily"
     exit 1
 fi
@@ -34,54 +41,56 @@ echo "Operating system: $os_name"
 case "$os_name" in
     "centos")
         echo "Installing on CentOS"
-        cp -T auto-update.dnf /etc/cron.daily/auto-update
+        cp -T auto-update.dnf "$cron_dir/auto-update"
         ;;
     "fedora")
         echo "Installing on Fedora"
-        cp -T auto-update.dnf /etc/cron.daily/auto-update
+        cp -T auto-update.dnf "$cron_dir/auto-update"
         ;;
     "red*hat")
         echo "Installing on Red Hat"
-        cp -T auto-update.dnf /etc/cron.daily/auto-update
+        cp -T auto-update.dnf "$cron_dir/auto-update"
         ;;
 
     "armbian")
         echo "Installing on Armbian"
-        cp -T auto-update.apt /etc/cron.daily/auto-update
+        cp -T auto-update.apt "$cron_dir/auto-update"
         ;;
     "debian")
         echo "Installing on Debian"
-        cp -T auto-update.apt /etc/cron.daily/auto-update
+        cp -T auto-update.apt "$cron_dir/auto-update"
         ;;
     "ubuntu")
         echo "Installing on Ubuntu"
-        cp -T auto-update.apt /etc/cron.daily/auto-update
+        cp -T auto-update.apt "$cron_dir/auto-update"
         ;;
     "zorin")
         echo "Installing on Zorin"
-        cp -T auto-update.apt /etc/cron.daily/auto-update
+        cp -T auto-update.apt "$cron_dir/auto-update"
         ;;
     "linaro")
         echo "Installing on Linaro"
-        cp -T auto-update.apt /etc/cron.daily/auto-update
+        cp -T auto-update.apt "$cron_dir/auto-update"
         ;;
     "sunos")
         echo "Installing on Solaris"
-        cp -T auto-update.solaris /etc/cron.daily/auto-update
+        cp -T auto-update.solaris "$cron_dir/auto-update"
         ;;
     *)
         echo "Unkown operating system"
         exit 1
 esac
 
-chmod u+rwx /etc/cron.daily/auto-update
-chown root:root /etc/cron.daily/auto-update
+chmod u+rwx "$cron_dir/auto-update"
+chown root:root "$cron_dir/auto-update"
 
 # Delete Systemd specific commands
-sed -i '/systemd-run/d' /etc/cron.daily/auto-update
+sed '/systemd-run/d' "$cron_dir/auto-update" > "$cron_dir/auto-update.new"
+mv "$cron_dir/auto-update.new" "$cron_dir/auto-update"
 
 # Uncomment shutdown command
-sed -i 's/# shutdown/shutdown/g' /etc/cron.daily/auto-update
+sed -i 's/# shutdown/shutdown/g' "$cron_dir/auto-update" > "$cron_dir/auto-update.new"
+mv "$cron_dir/auto-update.new" "$cron_dir/auto-update"
 
 echo "Installed service"
 exit 0
