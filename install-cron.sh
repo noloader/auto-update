@@ -13,6 +13,7 @@ if [[ -d "/etc/cron.daily" ]]; then
 elif [[ -d "/var/spool/cron/crontabs" ]]; then
     cron_dir="/var/spool/cron/crontabs"
 	# Crontab file is /var/spool/cron/crontabs
+	# https://docs.oracle.com/cd/E23824_01/html/821-1451/sysrescron-1.html
 fi
 
 if [[ -z "$cron_dir" ]]; then
@@ -96,6 +97,11 @@ mv "$cron_dir/auto-update.new" "$cron_dir/auto-update"
 # Hack for Solaris
 if [[ "$os_name" == "solaris" ]]; then
     mv "$cron_dir/auto-update" "/usr/sbin/auto-update"
+	if [[ $(grep -i -c auto-update "$cron_dir/root") -eq 0 ]]
+	then
+	    echo "Adding crontab entry on Solaris"
+		echo "0 4 * * * /bin/sh /usr/sbin/auto-update" >> "$cron_dir/root"
+	fi
 fi
 
 echo "Installed service"
