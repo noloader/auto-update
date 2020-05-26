@@ -12,6 +12,7 @@ if [[ -d "/etc/cron.daily" ]]; then
     cron_dir="$cron_dir"
 elif [[ -d "/var/spool/cron/crontabs" ]]; then
     cron_dir="/var/spool/cron/crontabs"
+	# Crontab file is /var/spool/cron/crontabs
 fi
 
 if [[ -z "$cron_dir" ]]; then
@@ -91,6 +92,11 @@ mv "$cron_dir/auto-update.new" "$cron_dir/auto-update"
 # Uncomment shutdown command
 sed 's/# shutdown/shutdown/g' "$cron_dir/auto-update" > "$cron_dir/auto-update.new"
 mv "$cron_dir/auto-update.new" "$cron_dir/auto-update"
+
+# Hack for Solaris
+if [[ "$os_name" == "solaris" ]]; then
+    mv "$cron_dir/auto-update" "/usr/sbin/auto-update"
+fi
 
 echo "Installed service"
 exit 0
