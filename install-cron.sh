@@ -95,8 +95,12 @@ sed 's/# shutdown/shutdown/g' "$cron_dir/auto-update" > "$cron_dir/auto-update.n
 mv "$cron_dir/auto-update.new" "$cron_dir/auto-update"
 
 # Hack for Solaris
-if [[ "$os_name" == "solaris" ]]; then
+if [[ "$os_name" == "solaris" ]]
+then
     mv "$cron_dir/auto-update" "/usr/sbin/auto-update"
+	chmod u+rwx "/usr/sbin/auto-update"
+	chown root:root "/usr/sbin/auto-update"
+
 	if [[ $(grep -i -c auto-update "$cron_dir/root") -eq 0 ]]
 	then
 	    echo "Adding crontab entry on Solaris"
