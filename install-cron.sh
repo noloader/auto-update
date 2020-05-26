@@ -83,8 +83,8 @@ case "$os_name" in
         exit 1
 esac
 
-chmod u+rwx "$cron_dir/auto-update"
 chown root:root "$cron_dir/auto-update"
+chmod u+rwx "$cron_dir/auto-update"
 
 # Delete Systemd specific commands
 sed '/systemd-run/d' "$cron_dir/auto-update" > "$cron_dir/auto-update.new"
@@ -98,8 +98,8 @@ mv "$cron_dir/auto-update.new" "$cron_dir/auto-update"
 if [[ "$os_name" == "solaris" ]]
 then
     mv "$cron_dir/auto-update" "/usr/sbin/auto-update"
-	chmod u+rwx "/usr/sbin/auto-update"
 	chown root:root "/usr/sbin/auto-update"
+	chmod u+rwx "/usr/sbin/auto-update"
 
 	if [[ $(grep -i -c auto-update "$cron_dir/root") -eq 0 ]]
 	then
