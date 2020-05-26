@@ -72,7 +72,7 @@ case "$os_name" in
         echo "Installing on Linaro"
         cp -T auto-update.apt "$cron_dir/auto-update"
         ;;
-    "sunos")
+    "solaris")
         echo "Installing on Solaris"
         cp -T auto-update.solaris "$cron_dir/auto-update"
         ;;
