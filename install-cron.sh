@@ -22,6 +22,8 @@ elif [[ -e /etc/fedora-release ]]; then
     os_name="fedora"
 elif [[ -e /etc/centos-release ]]; then
     os_name="centos"
+elif [[ $(uname -s 2>/dev/null) == "SunOS" ]]; then
+    os_name="solaris"
 else
     os_name="Unknown"
 fi
@@ -62,6 +64,10 @@ case "$os_name" in
     "linaro")
         echo "Installing on Linaro"
         cp -T auto-update.apt /etc/cron.daily/auto-update
+        ;;
+    "sunos")
+        echo "Installing on Solaris"
+        cp -T auto-update.solaris /etc/cron.daily/auto-update
         ;;
     *)
         echo "Unkown operating system"

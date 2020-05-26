@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+export PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+# https://docs.oracle.com/cd/E23824_01/html/821-1451/gkvaw.html
+if ! pkg update '*' --accept
+then
+	echo "Failed to upgrade system"
+	exit 1
+fi
+
+# TODO: figure out how to test for pending updates
+needs_reboot=1
+if [[ "$needs_reboot" -gt 0 ]]
+then
+    echo "Scheduling reboot in 10 minutes"
+    # shutdown -r +10
+    systemd-run --on-active=10m shutdown -r now
+else
+    echo "No reboot required"
+fi
+
+exit 0
