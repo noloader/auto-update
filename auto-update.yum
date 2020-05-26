@@ -19,6 +19,7 @@ needs_update=$(yum check-update 2>/dev/null | grep -c -v -E '^Last metadata|^Fed
 # Only update and reboot if packages are available
 if [[ "$needs_update" -gt 0 ]]
 then
+    echo "Upgrades are available"
     yum -y update &>/dev/null
     ret_val=$?
 
