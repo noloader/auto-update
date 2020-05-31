@@ -21,7 +21,7 @@ if [[ -z "$cron_dir" ]]; then
     exit 1
 fi
 
-if [[ -n $(command -v lsb_release) ]]; then
+if [[ -n $(command -v lsb_release 2>/dev/null) ]]; then
     os_name=$(lsb_release -a | awk -F ':' '$1 == "Distributor ID" {print $2}')
 elif [[ -e /etc/os-release ]]; then
     os_name=$(awk -F '=' '$1 == "ID" {print $2}' < /etc/os-release 2>/dev/null)
