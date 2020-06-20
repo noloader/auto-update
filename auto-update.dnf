@@ -30,15 +30,11 @@ then
         echo "Failed to upgrade system, error $ret_val"
         exit "$ret_val"
     fi
-
-    needs_reboot=1
 else
     echo "No system updates"
 fi
 
-# https://serverfault.com/q/122178
-needs_reboot=$(lsof 2>&1 | grep -c "(path inode=.*)")
-if [[ "$needs_reboot" -gt 0 ]]
+if [[ $(needs-restarting -r &>/dev/null) -eq 1 ]]
 then
     echo "Scheduling reboot in 10 minutes"
     # shutdown -r +10
