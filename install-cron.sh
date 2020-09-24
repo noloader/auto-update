@@ -78,6 +78,10 @@ case "$os_name" in
         echo "Installing on Solaris"
         cp auto-update.solaris "$cron_dir/auto-update"
         ;;
+    "sparky")
+        echo "Installing on Sparky"
+        cp -T auto-update.apt "$cron_dir/auto-update"
+        ;;
     *)
         echo "Unkown operating system"
         exit 1

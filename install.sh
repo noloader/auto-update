@@ -92,6 +92,12 @@ case "$os_name" in
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
+    "sparky")
+        echo "Installing on Sparky"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.apt /usr/sbin/auto-update
+        ;;
     *)
         echo "Unkown operating system"
         exit 1
