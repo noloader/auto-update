@@ -62,14 +62,6 @@ apt -y --fix-broken install 1>/dev/null
 echo "Removed old kernels"
 ```
 
-### Eclean
-
-Eclean provides `eclean-kernel` to remove old kernels.
-
-```
-eclean-kernel -n 1
-```
-
 ### DNF
 
 DNF does not provide a simple command to remove old kernels. The script below will do the job.
@@ -82,6 +74,14 @@ if [ "${#old_kernels[@]}" -ne 0 ]; then
 else
     echo "No old kernels found"
 fi
+```
+
+### Eclean
+
+Eclean provides `eclean-kernel` to remove old kernels.
+
+```
+eclean-kernel -n 1
 ```
 
 ### Yum
