@@ -38,39 +38,29 @@ Old kernels can accumulate over time. You can remove old kernels with the follow
 
 ### Apt
 
-Apt does not provide a simple command to remove old kernels. The script below will do the job but it is kind of hacky. The script generates a list of all kernels, removes the current kernel from the list, and then removes the remaining kernels.
+Apt does not provide a simple command to remove old kernels. The script below will do the job but it is kind of hacky. The script generates a list of all kernels, sorts the list of kernels by version, removes the latest kernel from the list, and then removes the remaining kernels.
 
 ```
-# Get list of all kernel versions. The values are
-# versions like 4.15.0-101, 5.3.0-53 and 5.4.0-37.
-all_kernels=()
-while IFS= read -r kernel; do
-    all_kernels+=("$kernel")
-done < <(apt-cache search linux-image-.* | cut -f 3,4 -d '-' | \
-    grep '[0-9]\+.[0-9]\+.[0-9]\+-[0-9]\+' | sort -V | uniq)
+# Get list of installed kernels. The `head -n -1` removes the
+# last kernel in the list, which should be the latest kernel.
+old_kernels=($(dpkg -l | grep linux-image | tr -s " " | \
+    cut -f 2 -d ' ' | sort -V | uniq | head -n -1))
 
-# Retain the current kernel. If you have a newer kernel
-# then reboot the machine to use the newer kernel.
-current_kernel=$(uname -r | cut -f 1,2 -d '-')
-echo "Current kernel is $current_kernel"
+if [ "${#old_kernels[@]}" -eq 0 ]; then
+    echo "No old kernels found"
+    exit 0
+fi
 
-if [[ -z "$current_kernel" ]]; then
-    echo "Failed to determine current kernel"
+echo "Removing old kernels"
+if ! apt-get remove -y --purge "${old_kernels[@]}"; then
+    echo "Failed to remove old kernels"
     exit 1
 fi
 
-target_kernels=()
-for kernel in "${all_kernels[@]}"
-do
-    if [[ $(grep -c "$current_kernel" <<< "$kernel") -eq 1 ]]; then continue; fi
-    target_kernels+=("$kernel")
-done
+apt -y --fix-broken install 1>/dev/null
 
-echo "Removing old kernels"
-apt-get remove -y --purge "${target_kernels[@]}"
+echo "Removed old kernels"
 ```
-
-The script might be improved with `dpkg -l | grep linux-image | tr -s " " | cut -f 2 -d ' '`. The pipeline creates a list of installed kernels using `dpkg` instead of `apt`. After the list of installed kernels is generated, the current kernel needs to be removed from the list.
 
 ### Eclean
 
