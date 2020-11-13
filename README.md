@@ -51,15 +51,12 @@ if [ "${#old_kernels[@]}" -eq 0 ]; then
     exit 0
 fi
 
-echo "Removing old kernels"
 if ! apt-get remove -y --purge "${old_kernels[@]}"; then
     echo "Failed to remove old kernels"
     exit 1
 fi
 
 apt -y --fix-broken install 1>/dev/null
-
-echo "Removed old kernels"
 ```
 
 ### DNF
@@ -78,8 +75,6 @@ if ! dnf remove "${old_kernels[@]}"; then
     echo "Failed to remove old kernels"
     exit 1
 fi
-
-echo "Removed old kernels"
 ```
 
 ### Eclean
