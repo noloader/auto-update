@@ -68,12 +68,17 @@ DNF does not provide a simple command to remove old kernels. The script below wi
 
 ```
 old_kernels=($(dnf repoquery --installonly --latest-limit=-1 -q))
-if [ "${#old_kernels[@]}" -ne 0 ]; then
-    dnf remove "${old_kernels[@]}"
-    echo "Removed old kernels"
-else
+
+if [ "${#old_kernels[@]}" -eq 0 ]; then
     echo "No old kernels found"
 fi
+
+if ! dnf remove "${old_kernels[@]}"; then
+    echo "Failed to remove old kernels"
+    exit 1
+fi
+
+echo "Removed old kernels"
 ```
 
 ### Eclean
