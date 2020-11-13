@@ -70,6 +70,8 @@ echo "Removing old kernels"
 apt-get remove -y --purge "${target_kernels[@]}"
 ```
 
+The script might be improved with `dpkg -l | grep linux-image | tr -s " " | cut -f 2 -d ' '`. The pipeline creates a list of installed kernels using `dpkg` instead of `apt`. After the list of installed kernels is generated, the current kernel needs to be removed from the list.
+
 ### Eclean
 
 Eclean provides `eclean-kernel` to remove old kernels.
