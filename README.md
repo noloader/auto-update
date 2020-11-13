@@ -31,3 +31,71 @@ You can also use `systemctl list-timers` to show the status of all timers on the
 ## Cron jobs
 
 You should be able to schedule `/usr/sbin/auto-update` as a cron job under the system account. The script `install-cron.sh` will install `auto-update.dnf` or `auto-update.apt` as `/usr/sbin/auto-update` in `/etc/cron.daily`.
+
+## Old Kernels
+
+Old kernels can accumulate over time. You can remove old kernels with the following Bash commands.
+
+### Eclean
+
+Eclean provides `eclean-kernel` to remove old kernels.
+
+```
+eclean-kernel -n 1
+```
+
+### DNF
+
+DNF does not provide a simple command to remove old kernels. The script below will do the job.
+
+```
+old_kernels=($(dnf repoquery --installonly --latest-limit=-1 -q))
+if [ "${#old_kernels[@]}" -ne 0 ]; then
+    dnf remove "${old_kernels[@]}"
+	echo "Removed old kernels"
+else
+	echo "No old kernels found"
+fi
+```
+
+### Yum
+
+Yum provides `package-cleanup` to remove old kernels.
+
+```
+package-cleanup --oldkernels --count=1
+```
+
+### Apt
+
+Apt does not provide a simple command to remove old kernels. The script below will do the job but it is kind of hacky. The script generates a list of all kernels, removes the current kernel from the list, and then removes the remaining kernels.
+
+```
+# Get list of all kernel versions. The values are
+# versions like 4.15.0-101, 5.3.0-53 and 5.4.0-37.
+all_kernels=()
+while IFS= read -r kernel; do
+	all_kernels+=("$kernel")
+done < <(apt-cache search linux-image-.* | cut -f 3,4 -d '-' | \
+	grep '[0-9]\+.[0-9]\+.[0-9]\+-[0-9]\+' | sort -V | uniq)
+
+# Retain the current kernel. If you have a newer kernel
+# then reboot the machine to use the newer kernel.
+current_kernel=$(uname -r | cut -f 1,2 -d '-')
+echo "Current kernel is $current_kernel"
+
+if [[ -z "$current_kernel" ]]; then
+	echo "Failed to determine current kernel"
+	exit 1
+fi
+
+target_kernels=()
+for kernel in "${all_kernels[@]}"
+do
+	if [[ $(grep -c "$current_kernel" <<< "$kernel") -eq 1 ]]; then continue; fi
+	target_kernels+=("$kernel")
+done
+
+echo "Removing old kernels"
+apt-get remove -y --purge "${target_kernels[@]}"
+```
