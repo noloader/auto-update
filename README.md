@@ -36,36 +36,6 @@ You should be able to schedule `/usr/sbin/auto-update` as a cron job under the s
 
 Old kernels can accumulate over time. You can remove old kernels with the following Bash commands.
 
-### Eclean
-
-Eclean provides `eclean-kernel` to remove old kernels.
-
-```
-eclean-kernel -n 1
-```
-
-### DNF
-
-DNF does not provide a simple command to remove old kernels. The script below will do the job.
-
-```
-old_kernels=($(dnf repoquery --installonly --latest-limit=-1 -q))
-if [ "${#old_kernels[@]}" -ne 0 ]; then
-    dnf remove "${old_kernels[@]}"
-	echo "Removed old kernels"
-else
-	echo "No old kernels found"
-fi
-```
-
-### Yum
-
-Yum provides `package-cleanup` to remove old kernels.
-
-```
-package-cleanup --oldkernels --count=1
-```
-
 ### Apt
 
 Apt does not provide a simple command to remove old kernels. The script below will do the job but it is kind of hacky. The script generates a list of all kernels, removes the current kernel from the list, and then removes the remaining kernels.
@@ -98,4 +68,34 @@ done
 
 echo "Removing old kernels"
 apt-get remove -y --purge "${target_kernels[@]}"
+```
+
+### Eclean
+
+Eclean provides `eclean-kernel` to remove old kernels.
+
+```
+eclean-kernel -n 1
+```
+
+### DNF
+
+DNF does not provide a simple command to remove old kernels. The script below will do the job.
+
+```
+old_kernels=($(dnf repoquery --installonly --latest-limit=-1 -q))
+if [ "${#old_kernels[@]}" -ne 0 ]; then
+    dnf remove "${old_kernels[@]}"
+	echo "Removed old kernels"
+else
+	echo "No old kernels found"
+fi
+```
+
+### Yum
+
+Yum provides `package-cleanup` to remove old kernels.
+
+```
+package-cleanup --oldkernels --count=1
 ```
