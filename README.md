@@ -45,9 +45,9 @@ Apt does not provide a simple command to remove old kernels. The script below wi
 # versions like 4.15.0-101, 5.3.0-53 and 5.4.0-37.
 all_kernels=()
 while IFS= read -r kernel; do
-	all_kernels+=("$kernel")
+    all_kernels+=("$kernel")
 done < <(apt-cache search linux-image-.* | cut -f 3,4 -d '-' | \
-	grep '[0-9]\+.[0-9]\+.[0-9]\+-[0-9]\+' | sort -V | uniq)
+    grep '[0-9]\+.[0-9]\+.[0-9]\+-[0-9]\+' | sort -V | uniq)
 
 # Retain the current kernel. If you have a newer kernel
 # then reboot the machine to use the newer kernel.
@@ -55,15 +55,15 @@ current_kernel=$(uname -r | cut -f 1,2 -d '-')
 echo "Current kernel is $current_kernel"
 
 if [[ -z "$current_kernel" ]]; then
-	echo "Failed to determine current kernel"
-	exit 1
+    echo "Failed to determine current kernel"
+    exit 1
 fi
 
 target_kernels=()
 for kernel in "${all_kernels[@]}"
 do
-	if [[ $(grep -c "$current_kernel" <<< "$kernel") -eq 1 ]]; then continue; fi
-	target_kernels+=("$kernel")
+    if [[ $(grep -c "$current_kernel" <<< "$kernel") -eq 1 ]]; then continue; fi
+    target_kernels+=("$kernel")
 done
 
 echo "Removing old kernels"
@@ -86,9 +86,9 @@ DNF does not provide a simple command to remove old kernels. The script below wi
 old_kernels=($(dnf repoquery --installonly --latest-limit=-1 -q))
 if [ "${#old_kernels[@]}" -ne 0 ]; then
     dnf remove "${old_kernels[@]}"
-	echo "Removed old kernels"
+    echo "Removed old kernels"
 else
-	echo "No old kernels found"
+    echo "No old kernels found"
 fi
 ```
 
