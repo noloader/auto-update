@@ -56,7 +56,9 @@ if ! apt-get remove -y --purge "${old_kernels[@]}"; then
     exit 1
 fi
 
-apt -y --fix-broken install 1>/dev/null
+# Cleanup package database
+apt autoremove 2>&1 | grep -Ev "^$"
+apt -y --fix-broken install 2>&1 | grep -Ev "^$"
 ```
 
 ### DNF
