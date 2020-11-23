@@ -34,11 +34,29 @@ else
     echo "No system updates"
 fi
 
+# needs-restarting misses an updated kernel
+# Check /lib/modules for an updated kernel
+reboot_required=0
+
 if [[ $(needs-restarting -r &>/dev/null) -eq 1 ]]
 then
-    echo "Scheduling reboot in 10 minutes"
-    # shutdown -r +10
-    systemd-run --on-active=10m shutdown -r now
+    reboot_required=1
+fi
+
+if [[ -d "/lib/modules" ]]
+then
+    # find returns /lib/modules/ and directories below it
+    COUNT=$(find /lib/modules/ -maxdepth 1 -type d | wc -l)
+    if [ "$COUNT" -gt 2 ]; then
+        reboot_required=1
+    fi
+fi
+
+if [[ "$reboot_required" -eq 1 ]]
+then
+    echo "Scheduling reboot in 5 minutes"
+    # shutdown -r +5
+    systemd-run --on-active=5m shutdown -r now
 else
     echo "No reboot required"
 fi

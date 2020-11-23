@@ -57,7 +57,7 @@ if ! apt-get remove -y --purge "${old_kernels[@]}"; then
 fi
 
 # Cleanup package database
-apt autoremove 2>&1 | grep -Ev "^$"
+apt -y autoremove 2>&1 | grep -Ev "^$"
 apt -y --fix-broken install 2>&1 | grep -Ev "^$"
 ```
 
