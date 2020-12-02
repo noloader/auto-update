@@ -74,6 +74,12 @@ case "$os_name" in
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
+    "peppermint")
+        echo "Installing on Peppermint"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.apt /usr/sbin/auto-update
+        ;;
     "ubuntu")
         echo "Installing on Ubuntu"
 		cp auto-update.service /etc/systemd/system

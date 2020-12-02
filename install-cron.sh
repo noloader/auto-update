@@ -62,6 +62,10 @@ case "$os_name" in
         echo "Installing on Debian"
         cp -T auto-update.apt "$cron_dir/auto-update"
         ;;
+    "peppermint")
+        echo "Installing on Peppermint"
+        cp -T auto-update.apt "$cron_dir/auto-update"
+        ;;
     "ubuntu")
         echo "Installing on Ubuntu"
         cp -T auto-update.apt "$cron_dir/auto-update"
