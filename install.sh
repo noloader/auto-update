@@ -68,14 +68,20 @@ case "$os_name" in
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
-    "raspbian")
-        echo "Installing on Raspbian"
+    "linuxmint")
+        echo "Installing on Linux Mint"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
     "peppermint")
         echo "Installing on Peppermint"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.apt /usr/sbin/auto-update
+        ;;
+    "raspbian")
+        echo "Installing on Raspbian"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
