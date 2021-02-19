@@ -50,8 +50,8 @@ fi
 if [[ -d "/lib/modules" ]]
 then
     # find returns /lib/modules/ and directories below it
-    COUNT=$(find /lib/modules/ -maxdepth 1 -type d | wc -l)
-    if [ "$COUNT" -gt 2 ]; then
+    count=$(find /lib/modules/ -maxdepth 1 -type d | wc -l)
+    if [ "${count}" -gt 2 ]; then
         reboot_required=1
     fi
 fi
