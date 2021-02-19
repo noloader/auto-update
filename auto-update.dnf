@@ -12,12 +12,16 @@ then
     dnf -y autoremove &>/dev/null
 fi
 
+if [[ -z "$(command -v needs-restarting 2>/dev/null)" ]]; then
+    dnf -y install dnf-utils 1>/dev/null
+fi
+
 # If no packages are upgradable, then the message is "Last metadata expiration check ...".
 # Otherwise a package name is listed as upgradable.
-needs_update=$(dnf check-update 2>/dev/null | grep -c -v -E 'Last metadata|^Fedora')
+needs_update=$(dnf check-update 2>/dev/null | tail -n +4 | wc -l)
 
 # Only update and reboot if packages are available
-if [[ "$needs_update" -gt 0 ]]
+if [[ "${needs_update}" -gt 0 ]]
 then
     echo "Upgrades are available"
     dnf -y upgrade &>/dev/null
@@ -52,7 +56,7 @@ then
     fi
 fi
 
-if [[ "$reboot_required" -eq 1 ]]
+if [[ "${reboot_required}" -eq 1 ]]
 then
     echo "Scheduling reboot in 5 minutes"
     # shutdown -r +5
