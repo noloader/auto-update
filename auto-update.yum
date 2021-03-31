@@ -56,6 +56,9 @@ then
     fi
 fi
 
+# Set to 0 if not set
+reboot_required=${$reboot_required:-0}
+
 if [[ "${reboot_required}" -eq 1 ]]
 then
     echo "Scheduling reboot in 5 minutes"

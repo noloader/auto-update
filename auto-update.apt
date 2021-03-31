@@ -29,7 +29,7 @@ needs_update=$(apt list --upgradable 2>/dev/null | grep -c -i -v 'Listing')
 if [[ "$needs_update" -gt 0 ]]
 then
 
-    apt-get dist-upgrade -y &>/dev/null
+    apt-get upgrade -y &>/dev/null
     ret_val=$?
 
     if [[ "$ret_val" -eq 0 ]]
@@ -49,6 +49,9 @@ if [[ -f /var/run/reboot-required ]]
 then
     needs_reboot=1
 fi
+
+# Set to 0 if not set
+needs_reboot=${$needs_reboot:-0}
 
 if [[ "$needs_reboot" -eq 1 ]]
 then
