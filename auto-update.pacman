@@ -20,6 +20,7 @@ needs_update=1
 
 if [[ "$needs_update" -gt 0 ]]
 then
+    echo "Upgrades are available"
 
     pacman -Syu --noconfirm &>/dev/null
     ret_val=$?
