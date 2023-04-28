@@ -44,10 +44,6 @@ fi
 # Check kernel versions, https://unix.stackexchange.com/a/719000
 kernel1=$(pacman -Q linux | sed 's/linux //' | tr '-' '.'); count=${#kernel1}
 kernel2=$(uname -r | cut -c 1-${count} | tr '-' '.');
-
-echo "kernel1: ${kernel1}"
-echo "kernel2: ${kernel2}"
-
 if [ "${kernel1}" != "${kernel2}" ]; then
     echo "Kernel in use, reboot required"
     reboot_required=1
