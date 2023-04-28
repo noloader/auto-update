@@ -115,12 +115,14 @@ case "$os_name" in
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.pacman /usr/sbin/auto-update
+		chmod ugo+x /usr/sbin/auto-update
         ;;
     manjaro*)
         echo "Installing on Manjaro"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.pacman /usr/sbin/auto-update
+		chmod ugo+x /usr/sbin/auto-update
         ;;
     *)
         echo "Unkown operating system"
