@@ -37,6 +37,7 @@ fi
 mapfile -t del_list < <(lsof +c 0 | grep 'DEL.*lib' | awk '{print $2}' | sort -u)
 if [[ "${#del_list[@]}" -gt 0 ]]
 then
+    echo "Files in use, reboot required"
     reboot_required=1
 fi
 
@@ -44,6 +45,7 @@ fi
 kernel1=$(uname -r | tr '-' '.')
 kernel2=$(pacman -Q linux | sed 's/linux //')
 if [ "${kernel1}" != "${kernel2}" ]; then
+    echo "Kernel in use, reboot required"
     reboot_required=1
 fi
 

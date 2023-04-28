@@ -58,6 +58,7 @@ fi
 
 if [[ -f /var/run/reboot-required ]]
 then
+    echo "System reports reboot required"
     needs_reboot=1
 fi
 

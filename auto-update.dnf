@@ -44,6 +44,7 @@ reboot_required=0
 
 if [[ $(needs-restarting -r &>/dev/null) -eq 1 ]]
 then
+    echo "System reports reboot required"
     reboot_required=1
 fi
 
@@ -52,6 +53,7 @@ then
     # find returns /lib/modules/ and directories below it
     count=$(find /lib/modules/ -maxdepth 1 -type d | wc -l)
     if [ "${count}" -gt 2 ]; then
+        echo "Kernel in use, reboot required"
         reboot_required=1
     fi
 fi
