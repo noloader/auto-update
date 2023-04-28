@@ -38,85 +38,85 @@ os_name=$(echo "$os_name" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')
 echo "Operating system: $os_name"
 
 case "$os_name" in
-    "centos")
+    centos)
         echo "Installing on CentOS"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.yum /usr/sbin/auto-update
         ;;
-    "fedora")
+    fedora)
         echo "Installing on Fedora"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.dnf /usr/sbin/auto-update
         ;;
-    "red*hat")
+    red*hat)
         echo "Installing on Red Hat"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.yum /usr/sbin/auto-update
         ;;
-    "armbian")
+    armbian)
         echo "Installing on Armbian"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
-    "debian")
+    debian)
         echo "Installing on Debian"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
-    "linuxmint")
+    linuxmint)
         echo "Installing on Linux Mint"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
-    "peppermint")
+    peppermint)
         echo "Installing on Peppermint"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
-    "raspbian")
+    raspbian)
         echo "Installing on Raspbian"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
-    "ubuntu")
+    ubuntu)
         echo "Installing on Ubuntu"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
-    "zorin")
+    zorin)
         echo "Installing on Zorin"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
-    "linaro")
+    linaro)
         echo "Installing on Linaro"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
-    "sparky")
+    sparky)
         echo "Installing on Sparky"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
-    "gentoo")
+    gentoo)
         echo "Installing on Gentoo"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.pacman /usr/sbin/auto-update
         ;;
-    "manjaro*")
+    manjaro*)
         echo "Installing on Manjaro"
 		cp auto-update.service /etc/systemd/system
 		cp auto-update.timer /etc/systemd/system
