@@ -110,6 +110,18 @@ case "$os_name" in
 		cp auto-update.timer /etc/systemd/system
 		cp -T auto-update.apt /usr/sbin/auto-update
         ;;
+    "gentoo")
+        echo "Installing on Gentoo"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.pacman /usr/sbin/auto-update
+        ;;
+    "manjaro*")
+        echo "Installing on Manjaro"
+		cp auto-update.service /etc/systemd/system
+		cp auto-update.timer /etc/systemd/system
+		cp -T auto-update.pacman /usr/sbin/auto-update
+        ;;
     *)
         echo "Unkown operating system"
         exit 1

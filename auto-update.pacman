@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+export PATH=/bin:/usr/bin:/sbin:/usr/sbin
+
+echo "Updating package list"
+pacman -S --refresh --noconfirm &>/dev/null
+
+if false
+then
+    echo "Purging old packages"
+    pacman -S --clean --noconfirm &>/dev/null
+fi
+
+needs_update=1
+
+if [[ "$needs_update" -gt 0 ]]
+then
+
+    pacman -Syu --noconfirm &>/dev/null
+    ret_val=$?
+
+    if [[ "$ret_val" -eq 0 ]]
+    then
+        echo "Upgraded system"
+    else
+        echo "Failed to upgrade system, error $ret_val"
+        exit "$ret_val"
+    fi
+fi
+
+# Check programs and libraries, https://unix.stackexchange.com/a/123770
+mapfile -t del_list < <(lsof +c 0 | grep 'DEL.*lib' | awk '{print $2}' | sort -u)
+if [[ "${#del_list[@]}" -gt 0 ]]
+then
+    reboot_required=1
+fi
+
+# Check kernel versions, https://unix.stackexchange.com/a/719000
+kernel1=$(uname -r | tr '-' '.')
+kernel2=$(pacman -Q linux | sed 's/linux //')
+if [ "${kernel1}" != "${kernel2}" ]; then
+    reboot_required=1
+fi
+
+# Set to 0 if not set
+reboot_required=${reboot_required:-0}
+
+if [[ "${reboot_required}" -eq 1 ]]
+then
+    echo "Scheduling reboot in 5 minutes"
+    # shutdown -r +5
+    systemd-run --on-active=5m shutdown -r now
+else
+    echo "No reboot required"
+fi
+
+exit 0

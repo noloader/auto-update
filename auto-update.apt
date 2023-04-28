@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export PATH=/sbin:/usr/sbin:/bin:/usr/bin
+export PATH=/bin:/usr/bin:/sbin:/usr/sbin
 export DEBIAN_FRONTEND=noninteractive
 
 echo "Updating package list"
@@ -37,6 +37,17 @@ then
         echo "Upgraded system"
     else
         echo "Failed to upgrade system, error $ret_val"
+        exit "$ret_val"
+    fi
+
+    apt-get dist-upgrade -y &>/dev/null
+    ret_val=$?
+
+    if [[ "$ret_val" -eq 0 ]]
+    then
+        echo "Distro-upgraded system"
+    else
+        echo "Failed to distro-upgrade system, error $ret_val"
         exit "$ret_val"
     fi
 
