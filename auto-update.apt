@@ -4,21 +4,21 @@ export PATH=/bin:/usr/bin:/sbin:/usr/sbin
 export DEBIAN_FRONTEND=noninteractive
 
 echo "Updating package list"
-apt-get -y autoclean &>/dev/null
-apt-get update &>/dev/null
+apt-get -y autoclean >/dev/null 2>&1
+apt-get update >/dev/null 2>&1
 
 # Ubuntu makes it a pain in the ass to remove old kernels
 # https://help.ubuntu.com/community/RemoveOldKernels
 if true
 then
-    apt-mark auto '^linux-.*-4.*(-generic)?$' &>/dev/null
-    apt-mark auto '^linux-.*-5.*(-generic)?$' &>/dev/null
+    apt-mark auto '^linux-.*-4.*(-generic)?$' >/dev/null 2>&1
+    apt-mark auto '^linux-.*-5.*(-generic)?$' >/dev/null 2>&1
 fi
 
 if true
 then
     echo "Purging old packages"
-    apt autoremove --purge &>/dev/null
+    apt autoremove --purge >/dev/null 2>&1
 fi
 
 # If no packages are upgradable, then the message is "Listing... Done".
@@ -29,7 +29,7 @@ needs_update=$(apt list --upgradable 2>/dev/null | grep -c -i -v 'Listing')
 if [[ "$needs_update" -gt 0 ]]
 then
 
-    apt-get upgrade -y &>/dev/null
+    apt-get upgrade -y >/dev/null 2>&1
     ret_val=$?
 
     if [[ "$ret_val" -eq 0 ]]
@@ -40,7 +40,7 @@ then
         exit "$ret_val"
     fi
 
-    apt-get dist-upgrade -y &>/dev/null
+    apt-get dist-upgrade -y >/dev/null 2>&1
     ret_val=$?
 
     if [[ "$ret_val" -eq 0 ]]
@@ -51,25 +51,41 @@ then
         exit "$ret_val"
     fi
 
-    needs_reboot=1
+    reboot_required=1
 else
     echo "No system updates"
+fi
+
+# https://manpages.debian.org/bullseye/debian-goodies/checkrestart.8.en.html
+if command -v checkrestart >/dev/null 2>&1;
+then
+    echo "Calling checkrestart"
+    if ! checkrestart --terse >/dev/null 2>&1;
+    then
+        reboot_required=1
+    fi
+fi
+
+if command -v update-pciids >/dev/null 2>&1;
+then
+    echo "Updating PCI Ids"
+    update-pciids -q >/dev/null 2>&1
 fi
 
 if [[ -f /var/run/reboot-required ]]
 then
     echo "System reports reboot required"
-    needs_reboot=1
+    reboot_required=1
 fi
 
 # Set to 0 if not set
-needs_reboot=${needs_reboot:-0}
+reboot_required=${reboot_required:-0}
 
-if [[ "$needs_reboot" -eq 1 ]]
+if [[ "${reboot_required}" -eq 1 ]]
 then
-    echo "Scheduling reboot in 10 minutes"
-    # shutdown -r +10
-    systemd-run --on-active=10m shutdown -r now
+    echo "Scheduling reboot in 5 minutes"
+    # shutdown -r +5
+    systemd-run --on-active=5m shutdown -r now
 else
     echo "No reboot required"
 fi

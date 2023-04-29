@@ -3,13 +3,13 @@
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin
 
 echo "Updating package list"
-yum clean all &>/dev/null
-yum check-update &>/dev/null
+yum clean all >/dev/null 2>&1
+yum check-update >/dev/null 2>&1
 
 if true
 then
     echo "Purging old packages"
-    yum -y autoremove &>/dev/null
+    yum -y autoremove >/dev/null 2>&1
 fi
 
 if [[ -z "$(command -v needs-restarting 2>/dev/null)" ]]; then
@@ -24,7 +24,7 @@ needs_update=$(yum check-update 2>/dev/null | tail -n +4 | wc -l)
 if [[ "${needs_update}" -gt 0 ]]
 then
     echo "Upgrades are available"
-    yum -y update &>/dev/null
+    yum -y update >/dev/null 2>&1
     ret_val=$?
 
     if [[ ("$ret_val" -eq 0) || ("$ret_val" -eq 100) ]]
@@ -42,7 +42,7 @@ fi
 # Check /lib/modules for an updated kernel
 reboot_required=0
 
-if [[ $(needs-restarting -r &>/dev/null) -eq 1 ]]
+if [[ $(needs-restarting -r >/dev/null 2>&1) -eq 1 ]]
 then
     reboot_required=1
 fi

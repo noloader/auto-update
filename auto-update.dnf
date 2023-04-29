@@ -3,13 +3,13 @@
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin
 
 echo "Updating package list"
-dnf clean all &>/dev/null
-dnf check-update &>/dev/null
+dnf clean all >/dev/null 2>&1
+dnf check-update >/dev/null 2>&1
 
 if true
 then
     echo "Purging old packages"
-    dnf -y autoremove &>/dev/null
+    dnf -y autoremove >/dev/null 2>&1
 fi
 
 if [[ -z "$(command -v needs-restarting 2>/dev/null)" ]]; then
@@ -24,7 +24,7 @@ needs_update=$(dnf check-update 2>/dev/null | tail -n +4 | wc -l)
 if [[ "${needs_update}" -gt 0 ]]
 then
     echo "Upgrades are available"
-    dnf -y upgrade &>/dev/null
+    dnf -y upgrade >/dev/null 2>&1
     ret_val=$?
 
     if [[ ("$ret_val" -eq 0) || ("$ret_val" -eq 100) ]]
@@ -38,11 +38,17 @@ else
     echo "No system updates"
 fi
 
+if command -v update-pciids >/dev/null 2>&1;
+then
+    echo "Updating PCI Ids"
+    update-pciids -q >/dev/null 2>&1
+fi
+
 # needs-restarting misses an updated kernel
 # Check /lib/modules for an updated kernel
 reboot_required=0
 
-if [[ $(needs-restarting -r &>/dev/null) -eq 1 ]]
+if [[ $(needs-restarting -r >/dev/null 2>&1) -eq 1 ]]
 then
     echo "System reports reboot required"
     reboot_required=1

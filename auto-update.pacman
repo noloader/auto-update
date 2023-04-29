@@ -3,17 +3,17 @@
 export PATH=/bin:/usr/bin:/sbin:/usr/sbin
 
 echo "Updating package list"
-pacman -S --refresh --noconfirm &>/dev/null
+pacman -S --refresh --noconfirm >/dev/null 2>&1
 
 if ! command -v lsof >/dev/null 2>&1;
 then
-    pacman -S --noconfirm lsof &>/dev/null
+    pacman -S --noconfirm lsof >/dev/null 2>&1
 fi
 
 if false
 then
     echo "Purging old packages"
-    pacman -S --clean --noconfirm &>/dev/null
+    pacman -S --clean --noconfirm >/dev/null 2>&1
 fi
 
 needs_update=1
@@ -22,7 +22,7 @@ if [[ "$needs_update" -gt 0 ]]
 then
     echo "Upgrades are available"
 
-    pacman -Syu --noconfirm &>/dev/null
+    pacman -Syu --noconfirm >/dev/null 2>&1
     ret_val=$?
 
     if [[ "$ret_val" -eq 0 ]]
@@ -32,6 +32,12 @@ then
         echo "Failed to upgrade system, error $ret_val"
         exit "$ret_val"
     fi
+fi
+
+if command -v update-pciids >/dev/null 2>&1;
+then
+    echo "Updating PCI Ids"
+    update-pciids -q >/dev/null 2>&1
 fi
 
 # Check programs and libraries, https://unix.stackexchange.com/a/123770
@@ -44,7 +50,7 @@ fi
 
 # Check kernel versions, https://unix.stackexchange.com/a/719000
 kernel1=$(pacman -Q linux | sed 's/linux //' | tr '-' '.'); count=${#kernel1}
-kernel2=$(uname -r | cut -c 1-${count} | tr '-' '.');
+kernel2=$(uname -r | cut -c 1-"${count}" | tr '-' '.');
 if [ "${kernel1}" != "${kernel2}" ]; then
     echo "Kernel in use, reboot required"
     reboot_required=1
