@@ -27,12 +27,12 @@ then
     dnf -y upgrade >/dev/null 2>&1
     ret_val=$?
 
-    if [[ ("$ret_val" -eq 0) || ("$ret_val" -eq 100) ]]
+    if [[ ("${ret_val}" -eq 0) || ("${ret_val}" -eq 100) ]]
     then
         echo "Upgraded system"
     else
-        echo "Failed to upgrade system, error $ret_val"
-        exit "$ret_val"
+        echo "Failed to upgrade system, error ${ret_val}"
+        exit "${ret_val}"
     fi
 else
     echo "No system updates"

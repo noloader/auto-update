@@ -32,23 +32,23 @@ then
     apt-get upgrade -y >/dev/null 2>&1
     ret_val=$?
 
-    if [[ "$ret_val" -eq 0 ]]
+    if [[ "${ret_val}" -eq 0 ]]
     then
         echo "Upgraded system"
     else
-        echo "Failed to upgrade system, error $ret_val"
-        exit "$ret_val"
+        echo "Failed to upgrade system, error ${ret_val}"
+        exit "${ret_val}"
     fi
 
     apt-get dist-upgrade -y >/dev/null 2>&1
     ret_val=$?
 
-    if [[ "$ret_val" -eq 0 ]]
+    if [[ "${ret_val}" -eq 0 ]]
     then
         echo "Distro-upgraded system"
     else
-        echo "Failed to distro-upgrade system, error $ret_val"
-        exit "$ret_val"
+        echo "Failed to distro-upgrade system, error ${ret_val}"
+        exit "${ret_val}"
     fi
 
     reboot_required=1

@@ -25,12 +25,12 @@ then
     pacman -Syu --noconfirm >/dev/null 2>&1
     ret_val=$?
 
-    if [[ "$ret_val" -eq 0 ]]
+    if [[ "${ret_val}" -eq 0 ]]
     then
         echo "Upgraded system"
     else
-        echo "Failed to upgrade system, error $ret_val"
-        exit "$ret_val"
+        echo "Failed to upgrade system, error ${ret_val}"
+        exit "${ret_val}"
     fi
 fi
 
