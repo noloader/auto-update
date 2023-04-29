@@ -7,12 +7,11 @@ echo "Updating package list"
 apt-get -y autoclean >/dev/null 2>&1
 apt-get update >/dev/null 2>&1
 
-# Ubuntu makes it a pain in the ass to remove old kernels
-# https://help.ubuntu.com/community/RemoveOldKernels
-if true
+# Install as required 
+if ! command -v checkrestart >/dev/null 2>&1;
 then
-    apt-mark auto '^linux-.*-4.*(-generic)?$' >/dev/null 2>&1
-    apt-mark auto '^linux-.*-5.*(-generic)?$' >/dev/null 2>&1
+    echo "Installing checkrestart"
+    apt-get install checkrestart >/dev/null 2>&1
 fi
 
 if true
@@ -26,7 +25,7 @@ fi
 needs_update=$(apt list --upgradable 2>/dev/null | grep -c -i -v 'Listing')
 
 # Only update and reboot if packages are available
-if [[ "$needs_update" -gt 0 ]]
+if [[ "${needs_update}" -gt 0 ]]
 then
 
     apt-get upgrade -y >/dev/null 2>&1
@@ -62,6 +61,7 @@ then
     echo "Calling checkrestart"
     if ! checkrestart --terse >/dev/null 2>&1;
     then
+        echo "System reports reboot required"
         reboot_required=1
     fi
 fi

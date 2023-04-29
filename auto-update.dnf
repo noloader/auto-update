@@ -6,14 +6,17 @@ echo "Updating package list"
 dnf clean all >/dev/null 2>&1
 dnf check-update >/dev/null 2>&1
 
+# Install as required 
+if ! command -v needs-restarting >/dev/null 2>&1;
+then
+    echo "Installing dnf-utils"
+    dnf -y install dnf-utils 1>/dev/null
+fi
+
 if true
 then
     echo "Purging old packages"
     dnf -y autoremove >/dev/null 2>&1
-fi
-
-if [[ -z "$(command -v needs-restarting 2>/dev/null)" ]]; then
-    dnf -y install dnf-utils 1>/dev/null
 fi
 
 # If no packages are upgradable, then the message is "Last metadata expiration check ...".
@@ -48,20 +51,11 @@ fi
 # Check /lib/modules for an updated kernel
 reboot_required=0
 
+echo "Calling needs-restarting"
 if [[ $(needs-restarting -r >/dev/null 2>&1) -eq 1 ]]
 then
     echo "System reports reboot required"
     reboot_required=1
-fi
-
-if [[ -d "/lib/modules" ]]
-then
-    # find returns /lib/modules/ and directories below it
-    count=$(find /lib/modules/ -maxdepth 1 -type d | wc -l)
-    if [ "${count}" -gt 2 ]; then
-        echo "Kernel in use, reboot required"
-        reboot_required=1
-    fi
 fi
 
 # Set to 0 if not set

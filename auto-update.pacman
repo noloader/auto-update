@@ -7,10 +7,11 @@ pacman -S --refresh --noconfirm >/dev/null 2>&1
 
 if ! command -v lsof >/dev/null 2>&1;
 then
+    echo "Installing lsof"
     pacman -S --noconfirm lsof >/dev/null 2>&1
 fi
 
-if false
+if true
 then
     echo "Purging old packages"
     pacman -S --clean --noconfirm >/dev/null 2>&1
@@ -18,7 +19,7 @@ fi
 
 needs_update=1
 
-if [[ "$needs_update" -gt 0 ]]
+if [[ "${needs_update}" -gt 0 ]]
 then
     echo "Upgrades are available"
 
