@@ -59,7 +59,7 @@ fi
 if command -v checkrestart >/dev/null 2>&1;
 then
     echo "Calling checkrestart"
-    if ! checkrestart --terse >/dev/null 2>&1;
+    if ! checkrestart -p --terse >/dev/null 2>&1;
     then
         echo "System reports reboot required"
         reboot_required=1
