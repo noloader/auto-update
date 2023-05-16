@@ -23,6 +23,9 @@ fi
 # Otherwise a package name is listed as upgradable.
 needs_update=$(yum check-update 2>/dev/null | tail -n +4 | wc -l)
 
+# Track kernels, too.
+kernel_count=$(ls -1 /lib/modules | wc -l)
+
 # Only update and reboot if packages are available
 if [[ "${needs_update}" -gt 0 ]]
 then
@@ -48,6 +51,12 @@ reboot_required=0
 echo "Calling needs-restarting"
 if [[ $(needs-restarting -r >/dev/null 2>&1) -eq 1 ]]
 then
+    reboot_required=1
+fi
+
+new_kernel_count=$(ls -1 /lib/modules | wc -l)
+if [[ ${new_kernel_count} -gt ${kernel_count} ]]; then
+    echo "Kernel installed, reboot required"
     reboot_required=1
 fi
 
